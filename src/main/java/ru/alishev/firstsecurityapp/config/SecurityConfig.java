@@ -3,6 +3,7 @@ package ru.alishev.firstsecurityapp.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.alishev.firstsecurityapp.service.PersonDetailsService;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true) // Для использования аннотации PreAuthorize
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PersonDetailsService personDetailsService;
@@ -39,9 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Конфигурируем авторизацию - считается сверху - вниз, от более детальных к менее
 
-        http
-                .authorizeRequests()
-                .antMatchers("/admin").hasRole("ADMIN") // Запись ROLE_ опускается
+        http.authorizeRequests()
                 .antMatchers("/auth/login", "/auth/registration", "/error").permitAll() // Запросы на эти страницы доступны всем
                 .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and() // Была настройка авторизации, теперь настройка страницы логина
