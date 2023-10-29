@@ -38,7 +38,6 @@ public class AuthController {
 
     @GetMapping("/registration")
     public String registrationPage(@ModelAttribute("person") Person person) {
-        System.out.println("1");
         return "auth/registration";
     }
 
