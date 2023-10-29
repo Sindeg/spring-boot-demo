@@ -33,18 +33,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Конфигурируем сам Spring Security
         // Сюда поступает HTTP запрос
         // Сами данные с формы мы не обрабатываем, за нас это сделает Spring Security
+        // Точно так же как и логаут
 
         // Конфигурируем авторизацию - считается сверху - вниз, от более детальных к менее
 
         http.csrf().disable() // Отключаем защиту от межсайтовой подделки запросов
-                .authorizeRequests() // Включаем авторизацию на доступ к страницам
-                .antMatchers("/auth/login", "/auth/registration", "/error").permitAll() // Запросы на эти страницы доступны всем
-                .anyRequest().authenticated()
-                .and() // Была настройка авторизации, теперь настройка страницы логина
-                .formLogin().loginPage("/auth/login") // Страница формы авторизации
-                .loginProcessingUrl("/process_login") // Указываем адрес по которому Spring будет ждать данные
-                .defaultSuccessUrl("/", true)
-                .failureUrl("/auth/login?error");
+                    .authorizeRequests() // Включаем авторизацию на доступ к страницам
+                    .antMatchers("/auth/login", "/auth/registration", "/error").permitAll() // Запросы на эти страницы доступны всем
+                    .anyRequest().authenticated()
+                    .and() // Была настройка авторизации, теперь настройка страницы логина
+                    .formLogin().loginPage("/auth/login") // Страница формы авторизации
+                    .loginProcessingUrl("/process_login") // Указываем адрес по которому Spring будет ждать данные
+                    .defaultSuccessUrl("/", true)
+                    .failureUrl("/auth/login?error")
+                .and()
+                    .logout()
+                    .logoutUrl("/logout") // При переходе на этот адрес удаляться куки и завершится сессия на сервере
+                    .logoutSuccessUrl("/auth/login");
     }
 
     @Bean

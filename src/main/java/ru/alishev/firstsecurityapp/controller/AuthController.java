@@ -31,6 +31,11 @@ public class AuthController {
         return "auth/login";
     }
 
+    @GetMapping("/test")
+    public String hello() {
+        return "123";
+    }
+
     @GetMapping("/registration")
     public String registrationPage(@ModelAttribute("person") Person person) {
         System.out.println("1");
