@@ -40,9 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Конфигурируем авторизацию - считается сверху - вниз, от более детальных к менее
 
         http
-                .authorizeRequests() // Включаем авторизацию на доступ к страницам
+                .authorizeRequests()
+                .antMatchers("/admin").hasRole("ADMIN") // Запись ROLE_ опускается
                 .antMatchers("/auth/login", "/auth/registration", "/error").permitAll() // Запросы на эти страницы доступны всем
-                .anyRequest().authenticated()
+                .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and() // Была настройка авторизации, теперь настройка страницы логина
                 .formLogin().loginPage("/auth/login") // Страница формы авторизации
                 .loginProcessingUrl("/process_login") // Указываем адрес по которому Spring будет ждать данные
